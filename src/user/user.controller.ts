@@ -1,16 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, UseInterceptors } from "@nestjs/common";
 import { UserService } from "./user.service";
+import { CreateUserDto } from "./dtos/createUser.dto";
+import { LoggingInterceptor } from "../interceptors/logging.interceptor";
 
 @Controller('/user')
+@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(LoggingInterceptor)
 export class UserController{
     constructor(private userService: UserService){}
     @Post()
-      createUser(@Body() requestBody:any){
+    // @UseInterceptors(ClassSerializerInterceptor)
+      createUser(@Body() requestBody:   CreateUserDto){
         return this.userService.createAcc(requestBody);
     
       }
     @Get()
     getAllUser(){
+        console.log("Second");
         return this.userService.findAll();
     }
 
